@@ -7,7 +7,17 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - What did the game look like the first time you ran it?
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
+bug-1: The hints are not accurate. 
+For instance, in Normal difficulty the secret was 89, I submitted 6 as my initial guess and kept on decrementing the guess by 2 till 0 as per the hint which said to go lower.
 
+bug-2: Unable to change Difficulty after a game session
+After a playing a game in normal difficulty, I wasn't able to change it to easy or hard until I refreshed the page.
+
+bug-3: New Game button Doesn't work 
+After the attempts are exhausted the console says "Game over. Start a new game to try again.". After clicking the New Game button, the secret changes, attempts reset but score & history remain unchanged do not know if that is the intended behaviour but the console doesn't take new guesses.
+
+bug-4: The secret's range doesn't correspond with Difficulty
+In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
 ---
 
 ## 2. How did you use AI as a teammate?
