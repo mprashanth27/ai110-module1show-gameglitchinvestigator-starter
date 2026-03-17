@@ -89,8 +89,16 @@ low, high = get_range_for_difficulty(difficulty)
 st.sidebar.caption(f"Range: {low} to {high}")
 st.sidebar.caption(f"Attempts allowed: {attempt_limit}")
 
-if "secret" not in st.session_state:
+# Reset all game state when difficulty changes mid-session (Bug 4.3 fix).
+# We track last_difficulty so that switching the sidebar selectbox regenerates
+# the secret using the new difficulty's range instead of keeping the old one.
+if "secret" not in st.session_state or st.session_state.get("last_difficulty") != difficulty:
+    st.session_state.last_difficulty = difficulty
     st.session_state.secret = random.randint(low, high)
+    st.session_state.attempts = 1
+    st.session_state.score = 0
+    st.session_state.status = "playing"
+    st.session_state.history = []
 
 if "attempts" not in st.session_state:
     st.session_state.attempts = 1

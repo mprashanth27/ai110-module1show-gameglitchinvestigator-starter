@@ -16,11 +16,11 @@ After a playing a game in normal difficulty, I wasn't able to change it to easy 
 bug-3: New Game button Doesn't work 
 After the attempts are exhausted the console says "Game over. Start a new game to try again.". After clicking the New Game button, the secret changes, attempts reset but score & history remain unchanged do not know if that is the intended behaviour but the console doesn't take new guesses.
 
-bug-4: The secret's range doesn't correspond with Difficulty
+bug-4 [Closed]: The secret's range doesn't correspond with Difficulty
 In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
   4.1 Hard difficulty has the wrong range (app.py:10) [Fixed]
   4.2 New Game ignores difficulty (app.py:136) [Fixed]
-  4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93)
+  4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93) [Fixed]
 ---
 
 ## 2. How did you use AI as a teammate?
