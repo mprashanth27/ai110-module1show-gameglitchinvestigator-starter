@@ -19,7 +19,7 @@ After the attempts are exhausted the console says "Game over. Start a new game t
 bug-4: The secret's range doesn't correspond with Difficulty
 In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
   4.1 Hard difficulty has the wrong range (app.py:10) [Fixed]
-  4.2 New Game ignores difficulty (app.py:136)
+  4.2 New Game ignores difficulty (app.py:136) [Fixed]
   4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93)
 ---
 
