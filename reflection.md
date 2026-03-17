@@ -18,13 +18,18 @@ After the attempts are exhausted the console says "Game over. Start a new game t
 
 bug-4: The secret's range doesn't correspond with Difficulty
 In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
+  4.1 Hard difficulty has the wrong range (app.py:10) [Fixed]
+  4.2 New Game ignores difficulty (app.py:136)
+  4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93)
 ---
 
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
+I used Claude code to find and fix bugs and ChatGPT for syntax
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
+while Fixing bug-4.1, Claude code changed Hard difficulty range to 1-1000 instead of swapping of the values of Normal and Hard which was a fix that it suggested.
 
 ---
 
