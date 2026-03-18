@@ -212,3 +212,65 @@ def test_new_game_status_allows_subsequent_guess():
     assert session["status"] == "playing", (
         "status must be 'playing' after New Game so st.stop() is not triggered"
     )
+
+
+# --- Tests for Bug 1 fix: hints used string comparison on even attempts ---
+# Bug 1: on every even-numbered attempt, the secret was cast to str before
+# being passed to check_guess. This caused lexicographic comparison instead of
+# numeric, so single-digit guesses compared greater than two-digit secrets
+# (e.g. "6" > "24" lexicographically, even though 6 < 24 numerically),
+# producing an inverted "Go LOWER" hint when "Go HIGHER" was correct.
+# Fix: always pass the integer secret to check_guess; remove the even/odd branch.
+
+def test_exact_user_reported_case():
+    # User reported: secret=24, guess=6 → hint said "Go LOWER" (wrong).
+    # Lexicographically "6" > "24" because '6' > '2', hence the bad hint.
+    # After the fix, numeric comparison must return "Too Low".
+    result = check_guess(6, 24)
+    assert result == "Too Low", (
+        f"guess=6 < secret=24 numerically, expected 'Too Low', got '{result}'"
+    )
+
+def test_single_digit_less_than_two_digit_secret():
+    # Any single-digit guess is numerically less than a two-digit secret.
+    # String comparison inverts this for digits 3-9 (e.g. "9" > "10").
+    for guess in range(1, 10):
+        result = check_guess(guess, 10)
+        assert result == "Too Low", (
+            f"guess={guess} < secret=10 numerically, expected 'Too Low', got '{result}'"
+        )
+
+def test_two_digit_guess_greater_than_single_digit_secret():
+    # A two-digit guess is always numerically greater than a single-digit secret.
+    # String comparison could agree here but must be verified as numeric.
+    for guess in range(10, 20):
+        result = check_guess(guess, 9)
+        assert result == "Too High", (
+            f"guess={guess} > secret=9 numerically, expected 'Too High', got '{result}'"
+        )
+
+def test_hint_correct_across_full_normal_range():
+    # Sweep representative pairs across the Normal difficulty range (1–50)
+    # to confirm numeric ordering is always respected.
+    cases = [
+        (1,  50, "Too Low"),
+        (25, 50, "Too Low"),
+        (49, 50, "Too Low"),
+        (50, 50, "Win"),
+        (51, 50, "Too High"),
+        (9,  10, "Too Low"),   # would fail with string comparison ("9" > "10")
+        (8,  24, "Too Low"),   # variant of user-reported case
+        (6,  24, "Too Low"),   # exact user-reported case
+    ]
+    for guess, secret, expected in cases:
+        result = check_guess(guess, secret)
+        assert result == expected, (
+            f"guess={guess}, secret={secret}: expected '{expected}', got '{result}'"
+        )
+
+def test_check_guess_always_uses_integer_comparison():
+    # Passing an integer secret must never trigger string-ordering behaviour.
+    # If check_guess internally converts secret to str, these would fail.
+    assert check_guess(3, 30) == "Too Low"   # "3" > "30" lexicographically
+    assert check_guess(7, 70) == "Too Low"   # "7" > "70" lexicographically
+    assert check_guess(9, 19) == "Too Low"   # "9" > "19" lexicographically

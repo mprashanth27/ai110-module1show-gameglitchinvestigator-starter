@@ -7,7 +7,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - What did the game look like the first time you ran it?
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
-bug-1: The hints are not accurate. 
+bug-1 [Fixed]: The hints are not accurate. 
 For instance, in Normal difficulty the secret was 89, I submitted 6 as my initial guess and kept on decrementing the guess by 2 till 0 as per the hint which said to go lower.
 
 bug-2 [Fixed]: Unable to change Difficulty after a game session
