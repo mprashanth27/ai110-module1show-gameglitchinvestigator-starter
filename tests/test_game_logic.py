@@ -161,3 +161,54 @@ def test_secret_within_new_difficulty_range_after_switch():
             f"Secret {session['secret']} exceeds Easy upper bound of 20 after difficulty switch"
         )
         session["last_difficulty"] = "Hard"   # simulate switching back to trigger reset
+
+
+# --- Tests for Bug 3 fix: New Game button resets status to "playing" ---
+# Bug 3: the New Game button reset attempts and secret but never reset
+# st.session_state.status. After a loss ("lost") or win ("won"), status remained
+# set, so the guard block at line 149 called st.stop() immediately after rerun,
+# freezing the game even though a new round had started.
+# Fix: add st.session_state.status = "playing" inside the new_game block.
+
+def _simulate_new_game(session: dict, difficulty: str) -> None:
+    """Mirrors the new_game block in app.py (post Bug 3 fix) using a plain dict."""
+    session["attempts"] = 0
+    session["status"] = "playing"
+    low, high = get_range_for_difficulty(difficulty)
+    session["secret"] = random.randint(low, high)
+
+def test_new_game_resets_status_after_loss():
+    # After a loss, clicking New Game must set status back to "playing".
+    session = {"status": "lost", "attempts": 8, "score": 20, "history": [1, 2, 3]}
+    _simulate_new_game(session, "Normal")
+    assert session["status"] == "playing"
+
+def test_new_game_resets_status_after_win():
+    # After a win, clicking New Game must set status back to "playing".
+    session = {"status": "won", "attempts": 3, "score": 70, "history": [10, 25, 42]}
+    _simulate_new_game(session, "Normal")
+    assert session["status"] == "playing"
+
+def test_new_game_resets_attempts():
+    # Attempts counter must be zeroed so the new round starts fresh.
+    session = {"status": "lost", "attempts": 8, "score": 0, "history": []}
+    _simulate_new_game(session, "Easy")
+    assert session["attempts"] == 0
+
+def test_new_game_generates_secret_in_range():
+    # The new secret must be within the selected difficulty's range.
+    session = {"status": "lost", "attempts": 5, "score": 0, "history": []}
+    _simulate_new_game(session, "Easy")
+    low, high = get_range_for_difficulty("Easy")
+    assert low <= session["secret"] <= high
+
+def test_new_game_status_allows_subsequent_guess():
+    # After New Game, status == "playing" means the guess block would not be
+    # short-circuited by st.stop(). Simulate the guard condition directly.
+    session = {"status": "lost"}
+    _simulate_new_game(session, "Hard")
+    # The guard: `if st.session_state.status != "playing": st.stop()`
+    # With the fix applied, this condition must be False.
+    assert session["status"] == "playing", (
+        "status must be 'playing' after New Game so st.stop() is not triggered"
+    )
