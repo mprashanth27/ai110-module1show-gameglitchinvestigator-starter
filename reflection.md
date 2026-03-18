@@ -7,44 +7,66 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - What did the game look like the first time you ran it?
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
-bug-1 [Fixed]: The hints are not accurate. 
-For instance, in Normal difficulty the secret was 89, I submitted 6 as my initial guess and kept on decrementing the guess by 2 till 0 as per the hint which said to go lower.
 
-bug-2 [Fixed]: Unable to change Difficulty after a game session
-After a playing a game in normal difficulty, I wasn't able to change it to easy or hard until I refreshed the page.
+  bug-1 [Fixed]: The hints are not accurate. 
+  For instance, in Normal difficulty the secret was 89, I submitted 6 as my initial guess and kept on decrementing the guess by 2 till 0 as per the hint which said to go lower.
 
-bug-3 [Fixed]: New Game button Doesn't work 
-After the attempts are exhausted the console says "Game over. Start a new game to try again.". After clicking the New Game button, the secret changes, attempts reset but score & history remain unchanged do not know if that is the intended behaviour but the console doesn't take new guesses.
+  bug-2 [Fixed]: Unable to change Difficulty after a game session
+  After a playing a game in normal difficulty, I wasn't able to change it to easy or hard until I refreshed the page.
 
-bug-4 [Fixed]: The secret's range doesn't correspond with Difficulty
-In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
-  4.1 Hard difficulty has the wrong range (app.py:10) [Fixed]
-  4.2 New Game ignores difficulty (app.py:136) [Fixed]
-  4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93) [Fixed]
+  bug-3 [Fixed]: New Game button Doesn't work 
+  After the attempts are exhausted the console says "Game over. Start a new game to try again.". After clicking the New Game button, the secret changes, attempts reset but score & history remain unchanged do not know if that is the intended behaviour but the console doesn't take new guesses.
+
+  bug-4 [Fixed]: The secret's range doesn't correspond with Difficulty
+  In Easy Difficulty, the secret should be in the range of 1 - 20 but it was 46.
+
+    4.1 Hard difficulty has the wrong range (app.py:10) [Fixed]
+
+    4.2 New Game ignores difficulty (app.py:136) [Fixed]
+
+    4.3 Changing difficulty mid-session doesn't reset the secret (app.py:92-93) [Fixed]
 ---
 
 ## 2. How did you use AI as a teammate?
 
 - Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-I used Claude code to find and fix bugs and ChatGPT for syntax
+
+  I used Claude code to find and fix bugs and ChatGPT for syntax
+
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
+  
+  Claude code pointed out that the hints were reversed and fixed. I verified by using it's testcases and also by manually checking the scenarios
+
 - Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).
-while Fixing bug-4.1, Claude code changed Hard difficulty range to 1-1000 instead of swapping of the values of Normal and Hard which was a fix that it suggested.
+
+  while Fixing bug-4.1, Claude code changed Hard difficulty range to 1-1000 instead of swapping of the values of Normal and Hard which was a fix that it suggested.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
 - How did you decide whether a bug was really fixed?
+  
+  I verified by using Claude code testcases and also by manually checking the scenarios
+
 - Describe at least one test you ran (manual or using pytest)  
   and what it showed you about your code.
+
+  I used pytest and verified manually after every bug fix
+
 - Did AI help you design or understand any tests? How?
+  
+  Yes, It designed all my testcases and I also used ChatGPT to further examine the testcases before running them. 
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+  
+  Reruns: The whole app script runs from the start on every interaction, wiping the screen clean.
+
+  Session State: A special "memory" (like sticky notes) that persists across these reruns, allowing you to store variables and maintain continuity in your app.
 
 ---
 
@@ -52,5 +74,13 @@ while Fixing bug-4.1, Claude code changed Hard difficulty range to 1-1000 instea
 
 - What is one habit or strategy from this project that you want to reuse in future labs or projects?
   - This could be a testing habit, a prompting strategy, or a way you used Git.
+
+  I want to use AI for faster/efficient debugging and documentation.
+  
 - What is one thing you would do differently next time you work with AI on a coding task?
+  
+  I would like to reduce my dependence on AI for making critical logic design decisions 
+
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+  
+  I was really amazed at claude code's debugging capabilities but I did feel I had to pay an equal amount of attention time and effort wise when it was making changes to fix the code.
